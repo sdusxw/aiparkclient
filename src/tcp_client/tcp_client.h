@@ -23,9 +23,9 @@ public:
         shutdown();
     }
 
-    void start(const std::string& host, uint16_t port)
+    void start_work(const std::string& host, uint16_t port)
     {
-
+        client->setMode(ClinetSide);
         client->connect(host, port);
         //client->setKeepAlive(true, 30);
         //client->addReceiver(this);

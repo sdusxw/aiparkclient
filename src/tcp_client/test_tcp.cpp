@@ -19,7 +19,7 @@ int main(int argc, char** argv)
     Logger::instance().add(new ConsoleChannel("debug", Level::Debug));
     Logger::instance().setWriter(new AsyncLogWriter);
     {
-        tcp_cli.start("117.50.44.92", TcpPort);
+        tcp_cli.start_work("117.50.44.92", TcpPort);
         
         std::cout << "TCP Client " << std::endl;
         
