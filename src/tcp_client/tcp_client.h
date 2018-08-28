@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <scy/net/sslsocket.h>
 #include <scy/net/tcpsocket.h>
 #include <jsoncpp/json/json.h>
@@ -26,8 +27,9 @@ public:
     {
 
         client->connect(host, port);
-        client->setKeepAlive(true, 30);
+        //client->setKeepAlive(true, 30);
         client->addReceiver(this);
+        sleep(3);
         std::string msg = "{\"cmd\":\"init_parkid\",\"park_id\":\"0531100015\"}";
         client->send(msg.c_str(), msg.length());
     }
