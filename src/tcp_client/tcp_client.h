@@ -28,7 +28,7 @@ public:
 
         client->connect(host, port);
         //client->setKeepAlive(true, 30);
-        client->addReceiver(this);
+        //client->addReceiver(this);
         sleep(3);
         std::string msg = "{\"cmd\":\"init_parkid\",\"park_id\":\"0531100015\"}";
         ssize_t n = client->send(msg.c_str(), msg.length());
@@ -51,7 +51,7 @@ public:
 
     void onSocketError(Socket& socket, const Error& error)
     {
-        LDebug("On error: ", error.err, ": ", error.message)
+        cout << "On error: " << error.message << endl;
     }
 };
 
