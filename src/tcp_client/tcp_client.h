@@ -27,9 +27,9 @@ public:
     {
         client->setMode(ClientSide);
         client->connect(host, port);
-        //client->setKeepAlive(true, 30);
-        //client->addReceiver(this);
-        sleep(3);
+        client->setKeepAlive(true, 30);
+        client->addReceiver(this);
+        sleep(30);
         std::string msg = "{\"cmd\":\"init_parkid\",\"park_id\":\"0531100015\"}";
         ssize_t n = client->send(msg.c_str(), msg.length());
         cout << "sent:\t" << n << endl;
