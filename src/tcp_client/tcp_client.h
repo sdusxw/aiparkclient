@@ -25,7 +25,7 @@ public:
 
     void start_work(const std::string& host, uint16_t port)
     {
-        client->setMode(ClinetSide);
+        client->setMode(ClientSide);
         client->connect(host, port);
         //client->setKeepAlive(true, 30);
         //client->addReceiver(this);
