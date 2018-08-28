@@ -16,7 +16,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
     
-    TCPSocket tcp;
+    net::TCPSocket tcp;
     
     tcp.connect("117.50.44.92", 7666);
     
