@@ -31,7 +31,8 @@ public:
         client->addReceiver(this);
         sleep(3);
         std::string msg = "{\"cmd\":\"init_parkid\",\"park_id\":\"0531100015\"}";
-        client->send(msg.c_str(), msg.length());
+        ssize_t n = client->send(msg.c_str(), msg.length());
+        cout << "sent:\t" << n << endl;
     }
 
     void shutdown()
