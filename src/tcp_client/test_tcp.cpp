@@ -1,4 +1,4 @@
-#include "tcp_server.h"
+#include "tcp_client.h"
 
 #include <scy/application.h>
 #include <scy/logger.h>
@@ -11,7 +11,7 @@ using namespace scy;
 const uint16_t TcpPort = 7666;
 
 
-TcpServer tcp_svr;
+TcpClient tcp_cli;
 
 
 int main(int argc, char** argv)
@@ -19,12 +19,12 @@ int main(int argc, char** argv)
     Logger::instance().add(new ConsoleChannel("debug", Level::Debug));
     Logger::instance().setWriter(new AsyncLogWriter);
     {
-        tcp_svr.start("0.0.0.0", TcpPort);
+        tcp_cli.start("117.50.44.92", TcpPort);
         
-        std::cout << "TCP Server listening on " << tcp_svr.server->address() << std::endl;
+        std::cout << "TCP Client " << std::endl;
         
         waitForShutdown([&](void*) {
-            tcp_svr.shutdown();
+            tcp_cli.shutdown();
         });
     }
     return 0;
