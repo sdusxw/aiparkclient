@@ -21,6 +21,10 @@ set(src_dir "@PROJECT_SOURCE_DIR@")
 set(bin_dir "@PROJECT_BINARY_DIR@")
 set(lib_dir "@PROJECT_BINARY_DIR@")
 
+set(SOLUTION_INCLUDE_DIRS
+    ${src_dir}/common
+)
+
 SET(EXECUTABLE_OUTPUT_PATH ${bin_dir}/bin)
 SET(LIBRARY_OUTPUT_PATH ${lib_dir}/lib)
 
