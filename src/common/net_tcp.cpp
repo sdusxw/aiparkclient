@@ -59,6 +59,22 @@ size_t NetTcpClient::send_data(std::string send_msg, std::string &recv_msg)
 	return n_ret;
 }
 
+size_t NetTcpClient::send_only(std::string send_msg)
+{
+    size_t n_len = (size_t) (send_msg.length());
+    size_t n_ret = write(connfd, send_msg.c_str(), n_len);
+    return n_ret;
+}
+
+size_t NetTcpClient::get_message(std::string &msg)
+{
+    int n_recv = 0;
+    char buf[2048];
+    n_recv = receivedata(connfd, buf, 2048, 5000, NULL);
+    msg = std::string((const char *)buf, n_recv);
+    return n_recv;
+}
+
 int receivedata(int socket, char * data, int length, int timeout,
 		unsigned int * scope_id)
 {

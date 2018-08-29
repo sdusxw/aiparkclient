@@ -48,6 +48,8 @@ public:
 
 	bool connect_server(std::string server_ip, int server_port);
 	size_t send_data(std::string send_msg, std::string &recv_msg);
+    size_t send_only(std::string send_msg);
+    size_t get_message(std::string &msg);
 	void dis_connect();
 public:
 	int connfd;

@@ -1,6 +1,6 @@
 #include "net_tcp.h"
 #include <iostream>
-
+#include <unistd.h>
 
 const uint16_t TcpPort = 7666;
 
@@ -18,9 +18,15 @@ int main(int argc, char** argv)
 
     std::string msg = "{\"cmd\":\"init_parkid\",\"park_id\":\"0531100015\"}";
     std::string recv_msg;
-    ssize_t n = tcp.send_data(msg, recv_msg);
+    ssize_t n = tcp.send_only(msg);
     cout << "sent:\t" << n << endl;
     cout << msg << endl;
-    cout << recv_msg << endl;
+    while(1)
+    {
+        tcp.get_message(recv_msg);
+        cout << recv_msg << endl;
+        usleep(50000);
+    }
+    
     return 0;
 }
