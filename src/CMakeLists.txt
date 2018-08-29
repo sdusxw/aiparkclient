@@ -25,4 +25,5 @@ SET(EXECUTABLE_OUTPUT_PATH ${bin_dir}/bin)
 SET(LIBRARY_OUTPUT_PATH ${lib_dir}/lib)
 
 # add subdirectories
+add_subdirectory(common)
 add_subdirectory(tcp_client)
