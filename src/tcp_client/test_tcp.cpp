@@ -10,8 +10,12 @@ NetTcpClient tcp;
 void *heartbeat(void* args)
 {
     std::string msg = "{\"cmd\":\"heartbeat\",\"park_id\":\"0531100015\"}";
-    ssize_t n = tcp.send_only(msg);
-    cout << "sent:\t" << n << endl;
+    while(true)
+    {
+        sleep(10);
+        ssize_t n = tcp.send_only(msg);
+        cout << "sent:\t" << n << endl;
+    }
     return NULL;
 }
 
