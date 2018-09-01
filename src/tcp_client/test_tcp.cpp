@@ -1,11 +1,19 @@
 #include "net_tcp.h"
 #include <iostream>
 #include <unistd.h>
-
-const uint16_t TcpPort = 7666;
-
+#include <pthread.h>
 
 using namespace std;
+
+NetTcpClient tcp;
+
+void *heartbeat(void* args)
+{
+    std::string msg = "{\"cmd\":\"heartbeat\",\"park_id\":\"0531100015\"}";
+    ssize_t n = tcp.send_only(msg);
+    cout << "sent:\t" << n << endl;
+    return NULL;
+}
 
 
 int main(int argc, char** argv)
@@ -13,7 +21,6 @@ int main(int argc, char** argv)
     
 
     //net::Address server("117.50.44.92", 7666);
-    NetTcpClient tcp;
     tcp.connect_server("117.50.44.92", 7666);
 
     std::string msg = "{\"cmd\":\"init_parkid\",\"park_id\":\"0531100015\"}";
@@ -21,6 +28,11 @@ int main(int argc, char** argv)
     ssize_t n = tcp.send_only(msg);
     cout << "sent:\t" << n << endl;
     cout << msg << endl;
+    
+    pthread_t id;
+    pthread_create(&id,NULL,heartbeat,NULL);
+    pthread_detach(id);
+    
     while(1)
     {
         tcp.get_message(recv_msg);
