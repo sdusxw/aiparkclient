@@ -11,5 +11,5 @@ add_executable(aipayclient
 	aipayclient.cpp
 )
 
-target_link_libraries(aipayclient pthread common)
+target_link_libraries(aipayclient pthread common jsoncpp)
 
