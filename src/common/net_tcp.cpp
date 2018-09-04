@@ -16,7 +16,8 @@ NetTcpClient::~NetTcpClient()
 
 void NetTcpClient::dis_connect()
 {
-	close(connfd);
+    if(connfd != -1)
+        close(connfd);
 }
 
 bool NetTcpClient::connect_server(std::string server_ip, int server_port)

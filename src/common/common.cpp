@@ -8,11 +8,6 @@
 
 #include <iconv.h>
 
-extern "C"
-{
-#include <jpeglib.h>
-}
-
 std::fstream g_log_file;
 
 std::string get_time_us()
@@ -103,8 +98,10 @@ void log_init()
 		msg_print("日志系统初始化失败，程序将在无日志状态下运行。");
 }
 
-void log_output(std::string msg)
+void log_output(std::string msg, bool std_print)
 {
+    if (std_print)
+        msg_print(msg);
 	if (g_log_file.good())
 	{
 		std::string log_msg = "[" + get_time_us() + "]" + msg;
@@ -189,7 +186,7 @@ int create_dir(const char *s_path_name)
 /*********************进程互斥（用文件）***********************************/
 bool is_have_instance()
 {
-	int file_id = open("./bipc.tmp", O_RDWR | O_CREAT, 0640);
+	int file_id = open("./aipayclient.tmp", O_RDWR | O_CREAT, 0640);
 	if (file_id < 0)
 	{
 		return true;
@@ -202,62 +199,7 @@ bool is_have_instance()
 
 	return false;
 }
-/*********************end**********************************************/
-void JpegInitSource(j_decompress_ptr cinfo)
-{
-}
-boolean JpegFillInputBuffer(j_decompress_ptr cinfo)
-{
-	return TRUE;
-}
-void JpegSkipInputData(j_decompress_ptr cinfo, long num_bytes)
-{
-}
-void JpegTermSource(j_decompress_ptr cinfo)
-{
-}
-//JPG解压函数
-bool jpeg_uncompress(const char * jpeg_data, int jpeg_size, char *rgb_data,
-		int rgb_size, int w, int h, int c)
-{
-	struct jpeg_decompress_struct cinfo;
-	struct jpeg_error_mgr jerr;
-	struct jpeg_source_mgr jpegSrcManager;
-	int ret;
-	JSAMPROW rowPointer[1];
-	cinfo.err = jpeg_std_error(&jerr);
-	jpeg_create_decompress(&cinfo);
 
-	jpegSrcManager.init_source = JpegInitSource;
-	jpegSrcManager.fill_input_buffer = JpegFillInputBuffer;
-	jpegSrcManager.skip_input_data = JpegSkipInputData;
-	jpegSrcManager.resync_to_restart = jpeg_resync_to_restart;
-	jpegSrcManager.term_source = JpegTermSource;
-	jpegSrcManager.next_input_byte = (unsigned char*) jpeg_data;
-	jpegSrcManager.bytes_in_buffer = jpeg_size;
-	cinfo.src = &jpegSrcManager;
-
-	jpeg_read_header(&cinfo, TRUE);
-	if (c == 3)
-		cinfo.out_color_space = JCS_EXT_BGR;
-	else if (c == 1)
-		cinfo.out_color_space = JCS_GRAYSCALE;
-	jpeg_start_decompress(&cinfo);
-	if (cinfo.output_width != (unsigned int) w
-			&& cinfo.output_height != (unsigned int) h)
-	{
-		jpeg_destroy_decompress(&cinfo);
-		return false;
-	}
-	for (int dy = 0; cinfo.output_scanline < cinfo.output_height; dy++)
-	{
-		rowPointer[0] = (unsigned char *) (rgb_data + w * dy * c);
-		ret = jpeg_read_scanlines(&cinfo, rowPointer, 1);
-	}
-	jpeg_finish_decompress(&cinfo);
-	jpeg_destroy_decompress(&cinfo);
-	return true;
-}
 std::vector<std::string> string_split(std::string str,std::string pattern)
 {
     std::string::size_type pos;
@@ -276,6 +218,41 @@ std::vector<std::string> string_split(std::string str,std::string pattern)
         }
     }
     return result;
+}
+bool read_config(Configure &conf)
+{
+    std::fstream cfg_file;
+    cfg_file.open(CONFIGURE_FILE);
+    if (!cfg_file.is_open())
+    {
+        std::cout << "Error: Open config file " << CONFIGURE_FILE << std::endl;
+        return false;
+    }
+    char tmp[256];
+    while (!cfg_file.eof())
+    {
+        char tmp[256] = "";
+        cfg_file.getline(tmp, 256);
+        std::string line(tmp);
+        if (line.length() > 0)
+        {
+            size_t pos = line.find('=');
+            std::string tmp_key = line.substr(0, pos);
+            if (tmp_key == "SERVER_IP")
+            {
+                conf.server_ip = line.substr(pos + 1);
+            }
+            else if (tmp_key == "SERVER_PORT")
+            {
+                conf.server_port = atoi((line.substr(pos + 1)).c_str());
+            }
+            else if (tmp_key == "PARK_ID")
+            {
+                conf.park_id = line.substr(pos + 1);
+            }
+        }
+    }
+    return true;
 }
 
 /****************************************************************************************************************************************

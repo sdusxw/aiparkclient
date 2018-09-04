@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 
 project(aiparkclient)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 cmake_policy(SET CMP0053 OLD)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -g")
@@ -30,4 +30,5 @@ SET(LIBRARY_OUTPUT_PATH ${lib_dir}/lib)
 
 # add subdirectories
 add_subdirectory(common)
+add_subdirectory(aipayclient)
 add_subdirectory(tcp_client)
