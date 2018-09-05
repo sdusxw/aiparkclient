@@ -127,7 +127,8 @@ void * thread_work(void *)
                 if (!reader.parse(msg, json_object))
                 {
                     //JSON格式错误导致解析失败
-                    cout << "[json]解析失败" << endl;
+                    log_str = "[json]解析失败";
+                    log_output(log_str);
                 }
                 else
                 {
@@ -139,7 +140,7 @@ void * thread_work(void *)
                         json_query_msg["park_id"] = json_object["park_id"];
                         json_query_msg["palte"] = json_object["plate"];
                         json_query_msg["openid"] = json_object["openid"];
-                        if(json_query_msg["palte"]="鲁AB925E")
+                        if(json_query_msg["palte"].asString()=="鲁AB925E")
                         {
                             json_query_msg["money"] = 10;
                             json_query_msg["intime"] = "2017-07-28  08:00:01";
