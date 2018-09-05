@@ -44,8 +44,8 @@ int main()
     pthread_create(&tid_work,NULL,thread_work,NULL);
     //join以上线程
     pthread_join(tid_connect, NULL);
-    pthread_join(tid_heartbeat, NULL);
     //pthread_join(tid_heartbeat, NULL);
+    pthread_join(tid_work, NULL);
 }
 
 //重连线程
