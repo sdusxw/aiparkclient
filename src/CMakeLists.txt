@@ -4,7 +4,7 @@ project(aiparkclient)
 
 set(CMAKE_CXX_STANDARD 11)
 
-cmake_policy(SET CMP0053 OLD)
+#cmake_policy(SET CMP0053 OLD)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
