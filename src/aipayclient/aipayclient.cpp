@@ -154,7 +154,7 @@ void * thread_work(void *)
                         std::string ret_msg = json_query_msg.toStyledString();
                         ssize_t n = tcp_client.send_only(ret_msg);
                     }
-                
+                }
             }
         }else{
             usleep(10000);
