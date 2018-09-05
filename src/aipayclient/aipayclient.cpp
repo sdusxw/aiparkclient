@@ -77,6 +77,8 @@ void * thread_connect(void *)
                 ai_online = false;
                 log_str = "连接服务器失败";
                 log_output(log_str);
+                //延时10秒后重新连接
+                sleep(10);
             }
         }
     }
@@ -143,4 +145,6 @@ void set_pipe()
 void handle_pipe(int sig)
 {
     ai_online = false;
+    std::string log_str = "服务器断线，开启重连线程";
+    log_output(log_str);
 }
