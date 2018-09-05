@@ -13,6 +13,8 @@ int main()
     std::string log_str;
     //初始化全局变量
     ai_online = false;
+    //处理PIPE信号，防止断网后程序退出
+    set_pipe();
     //日志初始化
     log_init();
     //打印系统启动消息
@@ -122,4 +124,23 @@ void * thread_work(void *)
         }
     }
     return NULL;
+}
+
+//设置pipe信号，保证断网发送不退出
+void set_pipe()
+{
+    struct sigaction action;
+    
+    action.sa_handler = handle_pipe;
+    
+    sigemptyset(&action.sa_mask);
+    
+    action.sa_flags = 0;
+    
+    sigaction(SIGPIPE, &action, NULL);
+}
+//pipe处理函数
+void handle_pipe(int sig)
+{
+    ai_online = false;
 }

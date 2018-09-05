@@ -14,6 +14,7 @@
 #include <pthread.h>
 #include <atomic>
 #include <jsoncpp/json/json.h>
+#include <signal.h>
 
 #define PAY_SVR_IP      ("117.50.44.92")
 #define PAY_TCP_PORT    (7666)
@@ -31,4 +32,9 @@ void * thread_connect(void *);
 void * thread_heartbeat(void *);
 //工作线程
 void * thread_work(void *);
+
+//设置pipe信号，保证断网发送不退出
+void set_pipe();
+//pipe处理函数
+void handle_pipe(int sig);
 #endif  //AI_PAY_CLIENT
