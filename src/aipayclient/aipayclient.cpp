@@ -37,14 +37,14 @@ int main()
     pthread_t tid_connect;
     pthread_create(&tid_connect,NULL,thread_connect,NULL);
     //启动心跳线程
-    //pthread_t tid_heartbeat;
-    //pthread_create(&tid_heartbeat,NULL,thread_heartbeat,NULL);
+    pthread_t tid_heartbeat;
+    pthread_create(&tid_heartbeat,NULL,thread_heartbeat,NULL);
     //启动工作线程
     pthread_t tid_work;
     pthread_create(&tid_work,NULL,thread_work,NULL);
     //join以上线程
     pthread_join(tid_connect, NULL);
-    //pthread_join(tid_heartbeat, NULL);
+    pthread_join(tid_heartbeat, NULL);
     pthread_join(tid_work, NULL);
 }
 
