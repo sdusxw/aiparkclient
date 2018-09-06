@@ -136,6 +136,7 @@ void * thread_work(void *)
                     std::string str_cmd = json_object["cmd"].asString();
                     if (str_cmd == "query_pay") {
                         Json::Value json_query_msg;
+                        Json::FastWriter writer;
                         json_query_msg["cmd"] = Json::Value("query_pay");
                         json_query_msg["park_id"] = json_object["park_id"];
                         json_query_msg["palte"] = json_object["plate"];
@@ -151,7 +152,7 @@ void * thread_work(void *)
                             json_query_msg["intime"] = "2017-07-28  10:30:05";
                         }
                         json_query_msg["ret"] = "ok";
-                        std::string ret_msg = json_query_msg.toStyledString();
+                        std::string ret_msg = writer.write(json_query_msg);
                         ssize_t n = tcp_client.send_only(ret_msg);
                     }
                 }
