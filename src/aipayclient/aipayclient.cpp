@@ -127,6 +127,8 @@ void * thread_work(void *)
                 log_output(log_str);
                 
                 p_sem_msg p_msg = (p_sem_msg)malloc(sizeof(sem_msg));
+                memcpy(p_msg->msg, msg.c_str(), msg.length());
+                p_msg->msg_len = msg.length();
                 
                 //创建新线程，处理消息
                 pthread_t pid_msg;
