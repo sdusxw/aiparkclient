@@ -32,6 +32,8 @@ void * thread_connect(void *);
 void * thread_heartbeat(void *);
 //工作线程
 void * thread_work(void *);
+//消息处理线程
+void * thread_msg(void *);
 
 //设置pipe信号，保证断网发送不退出
 void set_pipe();
