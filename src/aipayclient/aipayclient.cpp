@@ -166,6 +166,10 @@ void * thread_msg(void * para)
     }
     else
     {
+        std::string str_cmd = json_object["cmd"].asString();
+        if (str_cmd == "heartbeat") {
+            return NULL;
+        }
          std::string str_box_ip = json_object["box_ip"].asString();
          if (str_box_ip.length()==0) //发送到指定的岗亭IP
          {
