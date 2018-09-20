@@ -6,6 +6,11 @@
  */
 #include "aipayclient.h"
 
+typedef struct
+{
+    int msg_len;
+    char msg[1024];
+}sem_msg, *p_sem_msg;
 
 int main()
 {
@@ -120,47 +125,15 @@ void * thread_work(void *)
                 log_str = "收到服务器消息: ";
                 log_str += msg;
                 log_output(log_str);
-
-                Json::Reader reader;
-                Json::Value json_object;
                 
-                if (!reader.parse(msg, json_object))
-                {
-                    //JSON格式错误导致解析失败
-                    log_str = "[json]解析失败";
-                    log_output(log_str);
-                }
-                else
-                {
-                    //创建新线程，处理消息
-                    pthread_t pid_msg;
-                    pthread_create(&pid_msg,NULL,thread_msg,(void*)&json_object);
-                    pthread_detach(pid_msg);
-                    /*
-                    std::string str_cmd = json_object["cmd"].asString();
-                    if (str_cmd == "query_pay") {
-                        Json::Value json_query_msg;
-                        Json::FastWriter writer;
-                        json_query_msg["cmd"] = Json::Value("query_pay");
-                        json_query_msg["park_id"] = json_object["park_id"];
-                        json_query_msg["palte"] = json_object["plate"];
-                        json_query_msg["openid"] = json_object["openid"];
-                        if(json_query_msg["palte"].asString()=="鲁AB925E")
-                        {
-                            json_query_msg["money"] = 10;
-                            json_query_msg["intime"] = "2017-07-28  08:00:01";
-                        }
-                        else
-                        {
-                            json_query_msg["money"] = 6;
-                            json_query_msg["intime"] = "2017-07-28  10:30:05";
-                        }
-                        json_query_msg["ret"] = "ok";
-                        std::string ret_msg = writer.write(json_query_msg);
-                        ssize_t n = tcp_client.send_only(ret_msg);
-                    }
-                     */
-                }
+                p_sem_msg p_msg = (p_sem_msg)malloc(sizeof(sem_msg));
+                
+                //创建新线程，处理消息
+                pthread_t pid_msg;
+                pthread_create(&pid_msg,NULL,thread_msg,(void*)p_msg);
+                pthread_detach(pid_msg);
+
+                
             }
         }else{
             usleep(10000);
@@ -172,28 +145,43 @@ void * thread_work(void *)
 //消息处理线程
 void * thread_msg(void * para)
 {
-    Json::Value *p_json = (Json::Value*)para;
-    std::string str_cmd = (*p_json)["cmd"].asString();
-    if (str_cmd == "query_pay") {
-        Json::Value json_query_msg;
-        Json::FastWriter writer;
-        json_query_msg["cmd"] = Json::Value("query_pay");
-        json_query_msg["park_id"] = (*p_json)["park_id"];
-        json_query_msg["palte"] = (*p_json)["plate"];
-        json_query_msg["openid"] = (*p_json)["openid"];
-        if(json_query_msg["palte"].asString()=="鲁AB925E")
-        {
-            json_query_msg["money"] = 10;
-            json_query_msg["intime"] = "2017-07-28  08:00:01";
-        }
-        else
-        {
-            json_query_msg["money"] = 6;
-            json_query_msg["intime"] = "2017-07-28  10:30:05";
-        }
-        json_query_msg["ret"] = "ok";
-        std::string ret_msg = writer.write(json_query_msg);
-        ssize_t n = tcp_client.send_only(ret_msg);
+    p_sem_msg p_msg = (p_sem_msg)para;
+    Json::Reader reader;
+    Json::Value json_object;
+    
+    std::string msg = std::string(p_msg->msg, p_msg->msg_len);
+    
+    if (!reader.parse(msg, json_object))
+    {
+        //JSON格式错误导致解析失败
+        log_str = "[json]解析失败";
+        log_output(log_str);
+    }
+    else
+    {
+         std::string str_cmd = json_object["cmd"].asString();
+         if (str_cmd == "query_pay")
+         {
+             Json::Value json_query_msg;
+             Json::FastWriter writer;
+             json_query_msg["cmd"] = Json::Value("query_pay");
+             json_query_msg["park_id"] = json_object["park_id"];
+             json_query_msg["palte"] = json_object["plate"];
+             json_query_msg["openid"] = json_object["openid"];
+             if(json_query_msg["palte"].asString()=="鲁AB925E")
+             {
+                json_query_msg["money"] = 10;
+                json_query_msg["intime"] = "2017-07-28  08:00:01";
+             }
+             else
+             {
+                json_query_msg["money"] = 6;
+                json_query_msg["intime"] = "2017-07-28  10:30:05";
+             }
+             json_query_msg["ret"] = "ok";
+             std::string ret_msg = writer.write(json_query_msg);
+             ssize_t n = tcp_client.send_only(ret_msg);
+         }
     }
     return NULL;
 }
