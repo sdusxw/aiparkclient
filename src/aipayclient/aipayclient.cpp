@@ -181,7 +181,7 @@ void * thread_msg(void * para)
             {
                 //有返回消息
                 ssize_t n = tcp_client.send_only(recv_msg);
-                cout << "recv_msg  " << recv_msg << endl;
+                std::cout << "recv_msg  " << recv_msg << std::endl;
             }
         }
     }
