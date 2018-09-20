@@ -145,6 +145,7 @@ void * thread_work(void *)
 //消息处理线程
 void * thread_msg(void * para)
 {
+    std::string log_str;
     p_sem_msg p_msg = (p_sem_msg)para;
     Json::Reader reader;
     Json::Value json_object;
