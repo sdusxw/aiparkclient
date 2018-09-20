@@ -250,6 +250,10 @@ bool read_config(Configure &conf)
             {
                 conf.park_id = line.substr(pos + 1);
             }
+            else if (tmp_key == "BOX_IP")
+            {
+                conf.box_ip = line.substr(pos + 1);
+            }
         }
     }
     return true;

@@ -29,6 +29,7 @@ public:
     std::string server_ip;
     int     server_port;
     std::string park_id;
+    std::string box_ip;
 };
 
 //全局日志文件变量

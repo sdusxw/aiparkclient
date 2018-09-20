@@ -18,6 +18,10 @@ int main()
     std::string log_str;
     //初始化全局变量
     ai_online = false;
+    configure.server_ip="117.50.44.92";
+    configure.server_port=7666;
+    configure.park_id="0531000008";
+    configure.box_ip="127.0.0.1";
     //处理PIPE信号，防止断网后程序退出
     set_pipe();
     //日志初始化
@@ -162,29 +166,24 @@ void * thread_msg(void * para)
     }
     else
     {
-         std::string str_cmd = json_object["cmd"].asString();
-         if (str_cmd == "query_pay")
+         std::string str_box_ip = json_object["box_ip"].asString();
+         if (str_box_ip.length()==0) //发送到指定的岗亭IP
          {
-             Json::Value json_query_msg;
-             Json::FastWriter writer;
-             json_query_msg["cmd"] = Json::Value("query_pay");
-             json_query_msg["park_id"] = json_object["park_id"];
-             json_query_msg["palte"] = json_object["plate"];
-             json_query_msg["openid"] = json_object["openid"];
-             if(json_query_msg["palte"].asString()=="鲁AB925E")
-             {
-                json_query_msg["money"] = 10;
-                json_query_msg["intime"] = "2017-07-28  08:00:01";
-             }
-             else
-             {
-                json_query_msg["money"] = 6;
-                json_query_msg["intime"] = "2017-07-28  10:30:05";
-             }
-             json_query_msg["ret"] = "ok";
-             std::string ret_msg = writer.write(json_query_msg);
-             ssize_t n = tcp_client.send_only(ret_msg);
+             str_box_ip = configure.box_ip;
          }
+        NetTcpClient tcp_cli;
+        if(tcp_cli.connect_server(str_box_ip, 6000))
+        {
+            //连接指定岗亭的tcp端口6000成功，则发送消息
+            std::string recv_msg;
+            tcp_cli.send_data(msg, recv_msg);
+            if(recv_msg.length()>0)
+            {
+                //有返回消息
+                ssize_t n = tcp_client.send_only(recv_msg);
+                cout << "recv_msg  " << recv_msg << endl;
+            }
+        }
     }
     return NULL;
 }
