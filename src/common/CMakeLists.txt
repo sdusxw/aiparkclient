@@ -8,5 +8,5 @@ add_library(common
 	net_tcp.cpp
 )
 
-target_link_libraries(common pthread jpeg iconv)
+target_link_libraries(common pthread jpeg)
 

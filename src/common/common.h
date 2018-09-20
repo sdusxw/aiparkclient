@@ -62,11 +62,12 @@ std::vector<std::string> string_split(std::string str, std::string pattern);
 //读取配置文件
 bool read_config(Configure &conf);
 //字符编码转换
+/*
 bool gbk2utf8(std::string gbk, std::string &utf8);
 bool utf8togb2312(std::string utf8, std::string &gb2312);
 int gb2312toutf8(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
 int utf8togb2312(char *inbuf, size_t inlen, char *outbuf, size_t outlen);
 int code_convert(char *from_charset, char *to_charset, char *inbuf,
                  size_t inlen, char *outbuf, size_t outlen);
-
+*/
 #endif
