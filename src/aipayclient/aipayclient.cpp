@@ -188,7 +188,7 @@ void * thread_msg(void * para)
                 ssize_t n = tcp_client.send_only(recv_msg);
                 std::cout << "recv_msg  " << recv_msg << std::endl;
             }
-            tcp_cli.close();
+            tcp_cli.dis_connect();
         }
     }
     if(p_msg) {free(p_msg); p_msg=NULL;}
