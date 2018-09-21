@@ -175,6 +175,7 @@ void * thread_msg(void * para)
          {
              str_box_ip = configure.box_ip;
          }
+        std::cout << "box_ip:\t" << str_box_ip << std::endl;
         NetTcpClient tcp_cli;
         if(tcp_cli.connect_server(str_box_ip, 6000))
         {
@@ -189,6 +190,7 @@ void * thread_msg(void * para)
             }
         }
     }
+    if(p_msg) {free(p_msg); p_msg=NULL;}
     return NULL;
 }
 
