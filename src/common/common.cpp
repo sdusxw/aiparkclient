@@ -90,7 +90,7 @@ void log_init()
 {
 	//创建log文件夹
 	create_dir("../log");
-	std::string log_file_name = "../log/bipc_" + get_time_date() + ".log";
+	std::string log_file_name = "../log/paycli_" + get_time_date() + ".log";
 	g_log_file.open(log_file_name.c_str(), std::ios::out | std::ios::app);
 	if (g_log_file.good())
 		msg_print("日志系统初始化完成。");

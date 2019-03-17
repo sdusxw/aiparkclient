@@ -26,8 +26,14 @@ int main()
     set_pipe();
     //日志初始化
     log_init();
+    //检测是否有进程存在，防止重复启动
+    if(is_have_instance()){
+        log_str = "检测到AiPayClinet进程存在，本程序退出";
+        log_output(log_str);
+        return -1;
+    }
     //打印系统启动消息
-    log_str = "AiPayClient系统启动...版本号V3.14_20180904";
+    log_str = "AiPayClient系统启动...版本号V3.141_20190317";
     log_output(log_str);
     //读取配置文件
     if(read_config(configure))
